@@ -7,6 +7,8 @@ import Footer from "@/components/Footer/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
+console.log(process.env)
+
 export const metadata: Metadata = {
   title: "Catalogo Marccini",
   description: "Melhor preço",
