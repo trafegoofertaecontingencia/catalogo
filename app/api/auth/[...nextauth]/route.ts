@@ -1,5 +1,6 @@
-export async function GET() {
-  return new Response("Auth desativado temporariamente", { status: 200 });
-}
+import NextAuth from "next-auth"
+import { authOptions } from "@/utils/auth"
 
-export const POST = GET;
+const handler = NextAuth(authOptions)
+
+export { handler as GET, handler as POST }
