@@ -1,27 +1,13 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { prisma } from "@/utils/connect"
-import type { NextAuthOptions, User } from "next-auth"
-
-// Tipagem extra (se estiver usando TypeScript)
-declare module "next-auth" {
-  interface Session {
-    user: User & { isAdmin: boolean }
-  }
-}
-declare module "next-auth/jwt" {
-  interface JWT {
-    isAdmin: boolean
-  }
-}
+import { prisma } from "../../../utils/connect"
+import type { NextAuthOptions } from "next-auth"
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: "jwt",
-  },
+  session: { strategy: "jwt" },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -48,5 +34,13 @@ export const authOptions: NextAuthOptions = {
   },
 }
 
+// ✅ Solução correta para App Router
 const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
+
+export function GET(req: Request) {
+  return handler(req)
+}
+
+export function POST(req: Request) {
+  return handler(req)
+}
