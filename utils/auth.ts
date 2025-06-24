@@ -1,10 +1,11 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import { PrismaAdapter } from "@auth/prisma-adapter"
+import { Adapter } from "next-auth/adapters"
 import { prisma } from "@/utils/connect"
  
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: <Adapter>PrismaAdapter(prisma),
   providers: [Google],
   secret: process.env.AUTH_SECRET,
 })
