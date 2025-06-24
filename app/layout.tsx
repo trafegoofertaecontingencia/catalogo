@@ -7,7 +7,7 @@ import Footer from "@/components/Footer/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-console.log(process.env)
+console.log("GOOGLE_CLIENT_ID (layout):", process.env.GOOGLE_CLIENT_ID)
 
 export const metadata: Metadata = {
   title: "Catalogo Marccini",
