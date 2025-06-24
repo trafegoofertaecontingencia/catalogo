@@ -1,15 +1,19 @@
-import NextAuth from "next-auth"
-import Google from "next-auth/providers/google"
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { NextAuthOptions, getServerSession } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import { prisma } from "./connect";
 
-export const { auth, handlers, signIn, signOut } = NextAuth({
-  adapter: await (async () => {
-    const { PrismaAdapter } = await import("@auth/prisma-adapter")
-    const { prisma } = await import("@/utils/connect")
-    return PrismaAdapter(prisma)
-  })(),
-  providers: [Google],
-  secret: process.env.AUTH_SECRET,
-})
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: "jwt",
+  },
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID!,
+      clientSecret: process.env.GOOGLE_SECRET!,
+    }),
+  ],
+};
 
-export const { GET, POST } = handlers
-export const dynamic = "force-dynamic"
+export const getAuthSession = () => getServerSession(authOptions);
