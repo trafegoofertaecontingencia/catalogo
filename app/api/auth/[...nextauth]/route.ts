@@ -34,7 +34,6 @@ export const authOptions: NextAuthOptions = {
   },
 }
 
-// ✅ Solução correta para App Router
 const handler = NextAuth(authOptions)
 
 export function GET(req: Request) {
