@@ -1,6 +1,12 @@
-export default function Home() {
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-  console.log("GOOGLE_CLIENT_ID (layout):", process.env.GOOGLE_CLIENT_ID)
+export default async function Home() {
+
+  const session = await auth();
+
+  if(!session) redirect("/auth/sign-in");
+
   return (
    <div>
 

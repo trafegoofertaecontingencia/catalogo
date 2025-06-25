@@ -1,9 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import AuthProvider from "@/components/AuthProvider";
-import Navbar from "@/components/Navbar/Navbar";
-import Footer from "@/components/Footer/Footer";
+import { auth } from "@/lib/auth";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,21 +12,22 @@ export const metadata: Metadata = {
   description: "Melhor preço",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+
+  const session = await auth();
+
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>
-          <Navbar />
-            <div className="min-h-[80vh]">
-              {children}
-            </div>
-            <Footer />
-        </AuthProvider>
+        <Navbar session={session} />
+        <div className="min-h-[80vh] bg-zinc-100 pt-10">{children}</div>
+        <Footer />
       </body>
     </html>
   );

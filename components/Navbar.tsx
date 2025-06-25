@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useSession, signOut, signIn } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -9,12 +8,13 @@ import { Menu } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { FaShoppingCart } from "react-icons/fa";
+import { SignOut } from "./sign-out";
 
-export default function Navbar() {
-  const { data: session } = useSession();
+
+export default function Navbar({ session }: any) {
+
   const [open, setOpen] = useState(false);
 
-  const userImage = session?.user?.image;
 
   return (
     <nav className="w-full bg-zinc-900 text-white shadow px-4 py-3 flex items-center justify-between">
@@ -32,20 +32,14 @@ export default function Navbar() {
         {session ? (
           <>
             <Avatar className="h-8 w-8">
-              <AvatarImage src={userImage || ""} alt="Avatar" />
+              <AvatarImage src={session?.user?.image || ""} alt="Avatar" />
               <AvatarFallback>?</AvatarFallback>
             </Avatar>
-            <Button
-              variant="ghost"
-              className="text-white"
-              onClick={() => signOut()}
-            >
-              Sair
-            </Button>
+            <SignOut />
           </>
         ) : (
-          <Button variant="secondary" onClick={() => signIn("google")}>
-            Entrar
+          <Button variant="secondary">
+            <Link href="/auth/sign-in">Entrar</Link>
           </Button>
         )}
       </div>
@@ -74,12 +68,12 @@ export default function Navbar() {
                 <>
                   <div className="flex items-center gap-2 mt-4">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={userImage || ""} alt="Avatar" />
+                      <AvatarImage src={session?.user?.image || ""} alt="Avatar" />
                       <AvatarFallback>?</AvatarFallback>
                     </Avatar>
                     <span className="text-sm">{session.user?.name}</span>
                   </div>
-                  <Button variant="outline" onClick={() => signOut()}>
+                  <Button variant="outline">
                     Sair
                   </Button>
                 </>
