@@ -5,6 +5,8 @@ import { auth } from "@/lib/auth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+import { Providers } from "./providers";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,9 +27,11 @@ console.log(session);
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar session={session} />
+        <Providers>
+          <Navbar/>
         <div className="min-h-[80vh] bg-zinc-100 pt-10">{children}</div>
         <Footer />
+        </Providers>
       </body>
     </html>
   );

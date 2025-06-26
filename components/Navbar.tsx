@@ -10,8 +10,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaShoppingCart } from "react-icons/fa";
 import { SignOut } from "./sign-out";
 
+import { useSession } from "next-auth/react";
 
-export default function Navbar({ session }: any) {
+export default function Navbar() {
+
+  const {data: session} = useSession();
+
+  console.log(session)
 
   const [open, setOpen] = useState(false);
 
