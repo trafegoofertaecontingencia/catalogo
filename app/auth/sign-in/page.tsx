@@ -1,16 +1,36 @@
 import { GoogleSignIn } from "@/components/google-sign-in";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-const Page = async () => {
+import { Input } from "@/components/ui/input";
 
+import { signIn } from "@/lib/auth"; // importado do seu NextAuth()
+
+const Page = async () => {
   const session = await auth();
 
-  if(session) redirect("/")
+  if (session) redirect("/");
+
+  async function handleLogin(formData: FormData) {
+    "use server";
+
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    try {
+      await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+    } catch (err) {
+      console.error("Erro ao fazer login", err);
+      // exiba uma mensagem de erro amigável aqui
+    }
+  }
 
   return (
     <div className="w-full max-w-sm mx-auto space-y-6 p-8 bg-white rounded-2xl">
@@ -27,13 +47,7 @@ const Page = async () => {
         </div>
       </div>
 
-      {/* Email/Password Sign In */}
-      <form
-        className="space-y-4"
-        action={async () => {
-          "use server";
-        }}
-      >
+      <form className="space-y-4" action={handleLogin}>
         <Input
           name="email"
           placeholder="Email"
