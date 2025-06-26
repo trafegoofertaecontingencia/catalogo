@@ -15,6 +15,7 @@ export default function Navbar({ session }: any) {
 
   const [open, setOpen] = useState(false);
 
+  console.log(session)
 
   return (
     <nav className="w-full bg-zinc-900 text-white shadow px-4 py-3 flex items-center justify-between">
