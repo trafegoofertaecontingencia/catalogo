@@ -16,7 +16,7 @@ export default function Navbar() {
 
   const {data: session} = useSession();
 
-  console.log(session)
+  console.log(session?.user?.image)
 
   const [open, setOpen] = useState(false);
 
@@ -58,29 +58,24 @@ export default function Navbar() {
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="bg-zinc-900 text-white w-64">
-            <div className="flex flex-col gap-4 mt-8">
+            <div className="flex flex-col items-center gap-4 mt-8">
               <Link href="/produtos" onClick={() => setOpen(false)}>
                 Produtos
               </Link>
               <Link href="/categorias" onClick={() => setOpen(false)}>
                 Categorias
               </Link>
-              <Link href="/carrinho" onClick={() => setOpen(false)}>
-                Carrinho
-              </Link>
+               {!session && <Link href="/carrinho"><FaShoppingCart /></Link>}
 
               {session && (
                 <>
-                  <div className="flex items-center gap-2 mt-4">
+                  <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={session?.user?.image || ""} alt="Avatar" />
                       <AvatarFallback>?</AvatarFallback>
                     </Avatar>
-                    <span className="text-sm">{session.user?.name}</span>
+                    <SignOut />
                   </div>
-                  <Button variant="outline">
-                    Sair
-                  </Button>
                 </>
               )}
             </div>

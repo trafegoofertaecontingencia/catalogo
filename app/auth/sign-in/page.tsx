@@ -30,7 +30,9 @@ export default function Page() {
       redirect: false, // impede redirect automático
     });
 
-    if (res?.ok) {
+    console.log("RES:", res)
+
+    if (!res?.error) {
       router.push("/"); // redireciona manualmente
     } else {
       setError("Credenciais inválidas.");

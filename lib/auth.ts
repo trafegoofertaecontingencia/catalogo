@@ -49,6 +49,11 @@ export const { auth, handlers, signIn } = NextAuth({
     strategy: "jwt", // ou "database" se quiser usar sessão persistente
   },
   callbacks: {
+    async jwt({ token }) {
+      const user = await prisma.user.findUnique({ where: { id: token.sub } });
+      token.name = user?.name;
+      return token;
+    },
     async session({ session, token }) {
       if (token?.sub) {
         session.user.id = token.sub;
