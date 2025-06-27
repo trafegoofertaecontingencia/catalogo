@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 
 export const { auth, handlers, signIn } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  secret: process.env.AUTH_SECRET,
   providers: [
     Google,
     Credentials({
