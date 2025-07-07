@@ -2,11 +2,9 @@ import { prisma } from "@/utils/connect";
 import { NextResponse } from "next/server";
 
 // Corrigido aqui: o segundo argumento da função deve ser tipado corretamente para o Next.js 13+
-export async function GET(
-  _: Request,
-  context: { params: { id: string } }
-) {
-  const { id } = context.params;
+export async function GET(params: any) {
+
+  const { id } = params;
 
   try {
     const product = await prisma.product.findUnique({
