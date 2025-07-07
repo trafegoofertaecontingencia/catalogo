@@ -33,6 +33,8 @@ export const { auth, handlers, signIn } = NextAuth({
           where: { email: credentials.email },
         });
 
+        console.log("USER:", user);
+
 
         if (!user || !user.password) return null;
 
@@ -48,6 +50,7 @@ export const { auth, handlers, signIn } = NextAuth({
           name: user.name,
           email: user.email,
           image: user.image,
+          role: user.role
         };
       },
     }),
@@ -59,11 +62,13 @@ export const { auth, handlers, signIn } = NextAuth({
     async jwt({ token }) {
       const user = await prisma.user.findUnique({ where: { id: token.sub } });
       token.name = user?.name;
+      token.role = user?.role;
       return token;
     },
     async session({ session, token }) {
       if (token?.sub) {
         session.user.id = token.sub;
+        session.user.role = token.role as string;
       }
       return session;
     },

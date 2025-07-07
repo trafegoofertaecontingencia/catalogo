@@ -1,7 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { auth } from "@/lib/auth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -21,9 +20,6 @@ export default async function RootLayout({
 }) {
 
 
-  const session = await auth();
-
-console.log(session);
   return (
     <html lang="en">
       <body className={inter.className}>

@@ -16,8 +16,6 @@ export default function Navbar() {
 
   const {data: session} = useSession();
 
-  console.log(session?.user?.image)
-
   const [open, setOpen] = useState(false);
 
 
@@ -59,7 +57,7 @@ export default function Navbar() {
           </SheetTrigger>
           <SheetContent side="right" className="bg-zinc-900 text-white w-64">
             <div className="flex flex-col items-center gap-4 mt-8">
-              <Link href="/produtos" onClick={() => setOpen(false)}>
+              <Link href="/products" onClick={() => setOpen(false)}>
                 Produtos
               </Link>
               <Link href="/categorias" onClick={() => setOpen(false)}>
