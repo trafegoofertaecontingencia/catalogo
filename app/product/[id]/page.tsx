@@ -12,7 +12,13 @@ type Product = {
   };
 };
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
+type ProductPageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function ProductPage({ params }: ProductPageProps) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${params.id}`, {
     cache: "no-store",
   });
