@@ -30,9 +30,9 @@ export default function Navbar() {
 
       {/* Desktop Menu */}
       <div className="hidden md:flex gap-4 items-center">
-        <Link href="/produtos">Produtos</Link>
-        <Link href="/categorias">Categorias</Link>
-        <Link href="/carrinho"><FaShoppingCart /></Link>
+        <Link href="/products">Produtos</Link>
+        <Link href="/categories">Categorias</Link>
+        <Link href="/cart"><FaShoppingCart /></Link>
 
         {session ? (
           <>

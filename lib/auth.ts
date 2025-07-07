@@ -33,7 +33,6 @@ export const { auth, handlers, signIn } = NextAuth({
           where: { email: credentials.email },
         });
 
-        console.log(user)
 
         if (!user || !user.password) return null;
 
@@ -41,8 +40,6 @@ export const { auth, handlers, signIn } = NextAuth({
           credentials.password,
           user.password
         );
-
-        console.log("SENHAS CONFEREM:", senhaConfere)
 
         if (!senhaConfere) return null;
 

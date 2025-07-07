@@ -30,7 +30,7 @@ export default function Page() {
       redirect: false, // impede redirect automático
     });
 
-    console.log("RES:", res)
+    console.log("RES", res)
 
     if (!res?.error) {
       router.push("/"); // redireciona manualmente
