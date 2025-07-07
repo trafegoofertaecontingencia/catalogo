@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type Product = {
   id: string;
@@ -42,30 +43,28 @@ export default function ProductsPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {products.map((product) => (
-            <div
-              key={product.id}
-              className="border rounded-2xl shadow hover:shadow-md transition bg-white p-4"
-            >
-              {product.imageUrl && (
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className="h-40 w-full object-cover rounded-md mb-3"
-                />
-              )}
-
-              <h2 className="text-lg font-semibold">{product.name}</h2>
-
-              {product.category?.name && (
-                <p className="text-sm text-zinc-500">
-                  Categoria: {product.category.name}
+            <Link key={product.id} href={`/products/${product.id}`}>
+              <div
+                className="border rounded-2xl shadow hover:shadow-md transition bg-white p-4"
+              >
+                {product.imageUrl && (
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className="h-40 w-full object-cover rounded-md mb-3"
+                  />
+                )}
+                <h2 className="text-lg font-semibold">{product.name}</h2>
+                {product.category?.name && (
+                  <p className="text-sm text-zinc-500">
+                    Categoria: {product.category.name}
+                  </p>
+                )}
+                <p className="text-zinc-800 font-bold mt-2">
+                  R$ {Number(product.price).toFixed(2)}
                 </p>
-              )}
-
-              <p className="text-zinc-800 font-bold mt-2">
-                R$ {Number(product.price).toFixed(2)}
-              </p>
-            </div>
+              </div>
+            </Link>
           ))}
         </div>
       )}
