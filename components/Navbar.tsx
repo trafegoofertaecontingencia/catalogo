@@ -3,34 +3,36 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import { FaShoppingCart } from "react-icons/fa";
 import { SignOut } from "./sign-out";
-
 import { useSession } from "next-auth/react";
+import { useCart } from "@/context/CartContext";
 
 export default function Navbar() {
-
-  const {data: session} = useSession();
-
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const { state } = useCart();
 
+  const totalQuantity = state.items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <nav className="w-full bg-zinc-900 text-white shadow px-4 py-3 flex items-center justify-between">
       {/* Logo / Nome do App */}
       <Link href="/" className="text-xl font-bold">
-        Marccini
+        <img className="w-20" src="/logo.png" alt="" />
       </Link>
 
       {/* Desktop Menu */}
-      <div className="hidden md:flex gap-4 items-center">
-        <Link href="/products">Produtos</Link>
-        <Link href="/categories">Categorias</Link>
-        <Link href="/cart"><FaShoppingCart /></Link>
+      <div className="flex gap-4 items-center relative">
+        <Link href="/cart" className="relative">
+          <FaShoppingCart size={22} />
+          {totalQuantity > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-600 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center">
+              {totalQuantity}
+            </span>
+          )}
+        </Link>
 
         {session ? (
           <>
@@ -45,40 +47,6 @@ export default function Navbar() {
             <Link href="/auth/sign-in">Entrar</Link>
           </Button>
         )}
-      </div>
-
-      {/* Mobile Menu */}
-      <div className="md:hidden">
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost">
-              <Menu className="text-white" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="bg-zinc-900 text-white w-64">
-            <div className="flex flex-col items-center gap-4 mt-8">
-              <Link href="/products" onClick={() => setOpen(false)}>
-                Produtos
-              </Link>
-              <Link href="/categorias" onClick={() => setOpen(false)}>
-                Categorias
-              </Link>
-               {!session && <Link href="/carrinho"><FaShoppingCart /></Link>}
-
-              {session && (
-                <>
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={session?.user?.image || ""} alt="Avatar" />
-                      <AvatarFallback>?</AvatarFallback>
-                    </Avatar>
-                    <SignOut />
-                  </div>
-                </>
-              )}
-            </div>
-          </SheetContent>
-        </Sheet>
       </div>
     </nav>
   );

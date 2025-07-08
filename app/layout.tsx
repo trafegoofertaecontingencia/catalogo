@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 import { Providers } from "./providers";
+import { CartProvider } from "@/context/CartContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,15 +19,15 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
-
   return (
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <Navbar/>
-        <div className="min-h-[80vh] bg-zinc-100 pt-10">{children}</div>
-        <Footer />
+          <CartProvider>
+            <Navbar />
+            <div className="min-h-[80vh] bg-zinc-100 pt-10">{children}</div>
+            <Footer />
+          </CartProvider>
         </Providers>
       </body>
     </html>

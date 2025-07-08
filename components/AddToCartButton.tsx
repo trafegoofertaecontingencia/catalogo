@@ -1,59 +1,74 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
 
-export default function AddToCartButton({ productId }: { productId: string }) {
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  imageUrl?: string;
+};
+
+export default function AddToCartButton({
+  product,
+  quantity,
+}: {
+  product: Product;
+  quantity: number;
+}) {
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [isError, setIsError] = useState(false);
-  const router = useRouter();
+  const [message, setMessage] = useState<{
+    text: string;
+    success: boolean;
+  } | null>(null);
 
-  const handleAdd = async () => {
+  const { dispatch } = useCart();
+
+  const handleAdd = () => {
     setLoading(true);
-    setMessage("");
-    setIsError(false);
 
     try {
-      const res = await fetch("/api/cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId, quantity: 1 }),
+      dispatch({
+        type: "ADD_ITEM",
+        payload: {
+          productId: product.id,
+          name: product.name,
+          price: product.price,
+          quantity,
+          imageUrl: product.imageUrl || "",
+        },
       });
 
-      if (!res.ok) throw new Error("Erro ao adicionar ao carrinho");
+      setMessage({ text: "Produto adicionado ao carrinho!", success: true });
 
-      // Mensagem de sucesso
-      setMessage("✅ Produto adicionado ao carrinho!");
-
-      router.push("/cart");
+      // Oculta a mensagem depois de 2 segundos
+      setTimeout(() => setMessage(null), 2000);
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Erro inesperado";
-      setIsError(true);
-      setMessage(`❌ ${errorMessage}`);
+      setMessage({ text: "Erro ao adicionar ao carrinho", success: false });
+      setTimeout(() => setMessage(null), 3000);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-2">
       <button
         onClick={handleAdd}
         disabled={loading}
-        className="bg-zinc-800 text-white px-6 py-2 rounded-xl transition hover:bg-zinc-700 disabled:opacity-50"
+        className="bg-zinc-800 text-white px-6 py-2 rounded-xl transition"
       >
         {loading ? "Adicionando..." : "Adicionar ao carrinho"}
       </button>
 
       {message && (
         <span
-          className={`mt-3 text-sm ${
-            isError ? "text-red-600" : "text-green-600"
+          className={`text-sm font-medium ${
+            message.success ? "text-green-600" : "text-red-600"
           }`}
         >
-          {message}
+          {message.text}
         </span>
       )}
     </div>

@@ -1,91 +1,75 @@
-// app/cart/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-
-type CartItem = {
-  id: string;
-  quantity: number;
-  price: number;
-  product: {
-    id: string;
-    name: string;
-    imageUrl?: string;
-  };
-};
+import { useCart } from "@/context/CartContext";
 
 export default function CartPage() {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const { state, dispatch } = useCart();
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const res = await fetch("/api/cart");
-        const data = await res.json();
-        setItems(data.items);
-        setTotal(data.total);
-      } catch (error) {
-        console.error("Erro ao carregar carrinho", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const total = state.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-    fetchCart();
-  }, []);
+  const handleIncrement = (productId: string) => {
+    dispatch({ type: "INCREMENT", payload: { productId } });
+  };
 
-  if (loading) {
-    return <p className="text-center text-sm text-zinc-500 mt-10">Carregando carrinho...</p>;
-  }
+  const handleDecrement = (productId: string) => {
+    dispatch({ type: "DECREMENT", payload: { productId } });
+  };
+
+  const handleCheckout = () => {
+    // Aqui você pode chamar a API para finalizar
+    alert("Compra finalizada (simulação)!");
+  };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold mb-6">Seu Carrinho</h1>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">Carrinho de Compras</h1>
 
-      {items.length === 0 ? (
-        <p className="text-zinc-500">Seu carrinho está vazio.</p>
+      {state.items.length === 0 ? (
+        <p>Carrinho vazio.</p>
       ) : (
-        <div className="space-y-4">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center justify-between border-b pb-4"
-            >
-              <div className="flex items-center gap-4">
-                {item.product.imageUrl && (
-                  <img
-                    src={item.product.imageUrl}
-                    alt={item.product.name}
-                    className="w-20 h-20 object-cover rounded-lg"
-                  />
-                )}
-                <div>
-                  <h2 className="text-lg font-semibold">{item.product.name}</h2>
-                  <p className="text-sm text-zinc-500">Qtd: {item.quantity}</p>
+        <ul>
+          {state.items.map((item) => (
+            <li key={item.productId} className="mb-4 flex items-center gap-4 border-b pb-4">
+              {item.imageUrl && (
+                <img src={item.imageUrl} alt={item.name} className="h-16 w-16 rounded object-cover" />
+              )}
+              <div className="flex-1">
+                <p className="font-semibold">{item.name}</p>
+                <p className="text-sm text-zinc-600">R$ {Number(item.price).toFixed(2)} cada</p>
+
+                <div className="mt-2 flex items-center gap-2">
+                  <button
+                    onClick={() => handleDecrement(item.productId)}
+                    className="px-2 py-1 bg-zinc-200 rounded"
+                  >
+                    –
+                  </button>
+                  <span className="font-medium">{item.quantity}</span>
+                  <button
+                    onClick={() => handleIncrement(item.productId)}
+                    className="px-2 py-1 bg-zinc-200 rounded"
+                  >
+                    +
+                  </button>
                 </div>
               </div>
-
-              <p className="text-zinc-800 font-semibold">
-                R$ {(item.price * item.quantity).toFixed(2)}
-              </p>
-            </div>
+              <div className="font-bold">
+                R$ {(Number(item.price) * item.quantity).toFixed(2)}
+              </div>
+            </li>
           ))}
+        </ul>
+      )}
 
-          <div className="text-right mt-6">
-            <p className="text-lg font-bold">Total: R$ {total.toFixed(2)}</p>
-          </div>
-
-          <div className="text-right mt-4">
-            <Link
-              href="/checkout"
-              className="bg-zinc-800 text-white px-6 py-2 rounded-xl transition"
-            >
-              Finalizar compra
-            </Link>
-          </div>
+      {state.items.length > 0 && (
+        <div className="mt-6 flex justify-between items-center">
+          <p className="text-lg font-bold">Total: R$ {total.toFixed(2)}</p>
+          <button
+            onClick={handleCheckout}
+            className="bg-zinc-800 text-white px-6 py-2 rounded-xl transition"
+          >
+            Finalizar Compra
+          </button>
         </div>
       )}
     </div>

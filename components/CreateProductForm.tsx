@@ -3,10 +3,8 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-import { useEffect } from "react";
 
 import { productFormSchema } from "@/lib/schemas/productForm";
 import { Button } from "@/components/ui/button";
@@ -17,10 +15,10 @@ import { v4 as uuidv4 } from "uuid";
 type ProductFormData = z.infer<typeof productFormSchema>;
 
 export default function CreateProductForm() {
-
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
@@ -29,6 +27,11 @@ export default function CreateProductForm() {
   const [categories, setCategories] = useState<{ id: string; name: string }[]>(
     []
   );
+  const [preview, setPreview] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const router = useRouter();
+
+  const imageFile = watch("image");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -44,49 +47,58 @@ export default function CreateProductForm() {
     fetchCategories();
   }, []);
 
-  const [success, setSuccess] = useState(false);
-  const router = useRouter();
+  useEffect(() => {
+    if (imageFile && imageFile.length > 0) {
+      const file = imageFile[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreview(null);
+    }
+  }, [imageFile]);
 
+  const onSubmit = async (data: any) => {
+    try {
+      const file = data.image[0];
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${uuidv4()}.${fileExt}`;
+      const filePath = `products/${fileName}`;
 
- const onSubmit = async (data: any) => {
-  try {
-    const file = data.image[0];
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${uuidv4()}.${fileExt}`;
-    const filePath = `products/${fileName}`;
+      const { error: uploadError } = await supabase.storage
+        .from("catalogo")
+        .upload(filePath, file);
 
-    // 1. Upload para Supabase
-    const { error: uploadError } = await supabase.storage
-      .from("catalogo") // nome do bucket
-      .upload(filePath, file);
+      if (uploadError) throw uploadError;
 
-    if (uploadError) throw uploadError;
+      const { data: publicUrlData } = supabase.storage
+        .from("catalogo")
+        .getPublicUrl(filePath);
 
+      const imageUrl = publicUrlData.publicUrl;
 
-    // 2. Monta a URL pública manualmente
-    const imageUrl = `https://crxjptjeoposcgjajqsx.supabase.co/storage/v1/object/public/catalogo/${filePath}`;
+      const res = await fetch("/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.name,
+          description: data.description,
+          price: Number(data.price),
+          categoryId: data.categoryId,
+          imageUrl,
+        }),
+      });
 
-    // 3. Envia os dados do produto para o backend
-    const res = await fetch("/api/products", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: data.name,
-        description: data.description,
-        price: Number(data.price),
-        categoryId: data.categoryId,
-        imageUrl, // nova URL vinda do Supabase
-      }),
-    });
+      if (!res.ok) throw new Error("Erro ao criar produto");
 
-    if (!res.ok) throw new Error("Erro ao criar produto");
-
-    setSuccess(true);
-    router.push("/");
-  } catch (error) {
-    console.error(error);
-  }
-};
+      setSuccess(true);
+      router.push("/products");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 border rounded-2xl shadow bg-white">
@@ -144,6 +156,14 @@ export default function CreateProductForm() {
               <p className="text-xs text-zinc-400">JPG, PNG ou WEBP até 5MB</p>
             </div>
           </div>
+
+          {preview && (
+            <img
+              src={preview}
+              alt="Pré-visualização"
+              className="mt-2 w-40 rounded-lg border"
+            />
+          )}
         </div>
 
         <div>

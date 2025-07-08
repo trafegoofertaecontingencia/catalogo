@@ -119,6 +119,7 @@ model Order {
   total     Float      @default(0)
   items     OrderItem[]
   createdAt DateTime   @default(now())
+  @@unique([userId, status])
 }
 
 model OrderItem {

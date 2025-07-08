@@ -1,63 +1,52 @@
 import { prisma } from "@/utils/connect";
-import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
-export async function GET() {
-  const session = await auth();
+import { auth } from "@/lib/auth";
 
-  if (!session?.user.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+export async function GET({params}: { params: { id: string } }) {
 
-  const order = await prisma.order.findFirst({
-    where: {
-      userId: session.user.id,
-      status: "DRAFT",
-    },
-    include: {
-      items: {
-        include: {
-          product: true,
+  const { id } = params;
+
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: {
+        category: {
+          select: { name: true },
         },
       },
-    },
-  });
+    });
 
-  if (!order) {
-    return NextResponse.json({ items: [], total: 0 });
+    if (!product) {
+      return new NextResponse("Produto não encontrado", { status: 404 });
+    }
+
+    return NextResponse.json({
+      ...product,
+      price: Number(product.price),
+    });
+  } catch (error) {
+    console.error("[PRODUCT_ID_GET]", error);
+    return new NextResponse("Erro interno no servidor", { status: 500 });
   }
-
-  return NextResponse.json({
-    items: order.items.map((item) => ({
-      id: item.id,
-      quantity: item.quantity,
-      price: item.price,
-      product: {
-        id: item.product.id,
-        name: item.product.name,
-        imageUrl: item.product.imageUrl,
-      },
-    })),
-    total: order.total,
-  });
 }
 
 export async function POST(req: Request) {
   const session = await auth();
 
-  if (!session || !session.user.id) {
-    return new NextResponse("Não autorizado", { status: 401 });
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 
   const userId = session.user.id;
   const { productId, quantity } = await req.json();
 
   if (!productId || !quantity || quantity <= 0) {
-    return new NextResponse("Dados inválidos", { status: 400 });
+    return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
   }
 
   try {
-    // Busca ou cria o pedido com status DRAFT
+    // Verifica se o usuário já tem um carrinho (pedido com status DRAFT)
     let order = await prisma.order.findFirst({
       where: {
         userId,
@@ -65,17 +54,17 @@ export async function POST(req: Request) {
       },
     });
 
+    // Se não existir, cria um novo carrinho
     if (!order) {
       order = await prisma.order.create({
         data: {
           userId,
           status: "DRAFT",
-          total: 0,
         },
       });
     }
 
-    // Verifica se o item já existe no carrinho
+    // Verifica se o item já está no carrinho
     const existingItem = await prisma.orderItem.findFirst({
       where: {
         orderId: order.id,
@@ -83,16 +72,8 @@ export async function POST(req: Request) {
       },
     });
 
-    const product = await prisma.product.findUnique({
-      where: { id: productId },
-    });
-
-    if (!product) {
-      return new NextResponse("Produto não encontrado", { status: 404 });
-    }
-
     if (existingItem) {
-      // Atualiza quantidade
+      // Atualiza a quantidade
       await prisma.orderItem.update({
         where: { id: existingItem.id },
         data: {
@@ -100,7 +81,15 @@ export async function POST(req: Request) {
         },
       });
     } else {
-      // Cria novo item no pedido
+      // Adiciona um novo item
+      const product = await prisma.product.findUnique({
+        where: { id: productId },
+      });
+
+      if (!product) {
+        return NextResponse.json({ error: "Produto não encontrado" }, { status: 404 });
+      }
+
       await prisma.orderItem.create({
         data: {
           orderId: order.id,
@@ -111,23 +100,9 @@ export async function POST(req: Request) {
       });
     }
 
-    // Recalcula total do pedido
-    const allItems = await prisma.orderItem.findMany({
-      where: { orderId: order.id },
-    });
-
-    const total = allItems.reduce((acc, item) => {
-      return acc + item.price * item.quantity;
-    }, 0);
-
-    await prisma.order.update({
-      where: { id: order.id },
-      data: { total },
-    });
-
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("[CART_POST]", error);
-    return new NextResponse("Erro interno no servidor", { status: 500 });
+    console.error("[CART_POST_ERROR]", error);
+    return NextResponse.json({ error: "Erro interno" }, { status: 500 });
   }
 }
