@@ -25,6 +25,7 @@ export default function Navbar() {
 
       {/* Desktop Menu */}
       <div className="flex gap-4 items-center relative">
+        {session?.user.role === "ADMIN" && <Link href="/create">Cadastrar</Link>}
         <Link href="/cart" className="relative">
           <FaShoppingCart size={22} />
           {totalQuantity > 0 && (
