@@ -7,11 +7,7 @@ import { cartReducer } from "@/reducers/cartReducer";
 const CartContext = createContext<{
   state: CartState;
   dispatch: React.Dispatch<CartAction>;
-}>({
-  state: { items: [] },
-  dispatch: () => null,
-});
-
+}>({ state: { items: [] }, dispatch: () => null });
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const initialState: CartState = {

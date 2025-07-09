@@ -19,6 +19,7 @@ export default function CreateProductForm() {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
@@ -98,7 +99,9 @@ export default function CreateProductForm() {
     } catch (error) {
       console.error(error);
     }
-  };
+  }
+  
+  console.log(imageFile);
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 border rounded-2xl shadow bg-white">
@@ -158,11 +161,22 @@ export default function CreateProductForm() {
           </div>
 
           {preview && (
-            <img
-              src={preview}
-              alt="Pré-visualização"
-              className="mt-2 w-40 rounded-lg border"
-            />
+            <div className="relative w-40">
+              <button
+              className="absolute right-3 top-3"
+                onClick={() => {
+                  setPreview(null);
+                  reset({image: null})
+                }}
+              >
+                X
+              </button>
+              <img
+                src={preview}
+                alt="Pré-visualização"
+                className="mt-2 rounded-lg border"
+              />
+            </div>
           )}
         </div>
 

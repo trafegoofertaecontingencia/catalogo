@@ -1,4 +1,3 @@
-// reducers/cartReducer.ts
 import { CartState, CartAction } from "@/types/cart";
 
 export const cartReducer = (state: CartState, action: CartAction): CartState => {
