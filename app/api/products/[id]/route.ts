@@ -23,13 +23,12 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function PUT(req: NextRequest) {
   const body = await req.json();
 
   try {
     const updatedProduct = await prisma.product.update({
-      where: { id },
+      where: { id: body.id },
       data: {
         name: body.name,
         description: body.description,
