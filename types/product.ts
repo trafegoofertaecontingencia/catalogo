@@ -7,4 +7,5 @@ export type Product = {
   category?: {
     name: string;
   };
+  barcode: string;
 };

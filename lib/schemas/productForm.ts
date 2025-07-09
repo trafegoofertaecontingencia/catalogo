@@ -11,6 +11,7 @@ export const productFormSchema = z.object({
   image: z
     .any()
     .refine(file => file?.[0] instanceof File, "Imagem obrigatória"),
+    barcode: z.string().min(8).max(20),
 });
 
 export type ProductFormData = z.infer<typeof productFormSchema>;

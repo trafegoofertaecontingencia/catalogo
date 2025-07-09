@@ -89,6 +89,7 @@ export default function CreateProductForm() {
           price: Number(data.price),
           categoryId: data.categoryId,
           imageUrl,
+          barcode: data.barcode
         }),
       });
 
@@ -196,6 +197,17 @@ export default function CreateProductForm() {
 
           {errors.categoryId && (
             <p className="text-red-500 text-sm">{errors.categoryId.message}</p>
+          )}
+        </div>
+        <div>
+          <label className="block font-medium">EAN</label>
+          <input
+            type="text"
+            {...register("barcode")}
+            className="w-full border px-3 py-2 rounded"
+          />
+          {errors.barcode && (
+            <p className="text-red-500 text-sm">{errors.barcode.message}</p>
           )}
         </div>
 

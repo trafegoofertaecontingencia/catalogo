@@ -101,6 +101,7 @@ model Product {
   imageUrl    String?
   categoryId  String
   category    Category    @relation(fields: [categoryId], references: [id])
+  barcode     String      @unique
   orderItems  OrderItem[]
   createdAt   DateTime    @default(now())
 }
