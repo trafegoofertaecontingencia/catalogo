@@ -1,8 +1,10 @@
 import { prisma } from "@/utils/connect";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+type Params = { params: { id: string } };
+
+export async function GET(req: NextRequest, context: Params) {
+  const { id } = context.params;
 
   try {
     const product = await prisma.product.findUnique({
@@ -22,7 +24,6 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     return new NextResponse("Erro interno", { status: 500 });
   }
 }
-
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const { id } = params;
