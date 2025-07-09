@@ -4,7 +4,23 @@ import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { Product } from "@/types/product";
 
+import { HiDotsHorizontal } from "react-icons/hi";
+
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 export default function ProductsPage() {
+
+  const { data: session } = useSession();
+
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
@@ -68,13 +84,22 @@ export default function ProductsPage() {
           {products.map((product) => (
             <div
               key={product.id}
-              className="border rounded-2xl shadow hover:shadow-md transition bg-white p-4 flex flex-col justify-between items-center"
+              className="relative border rounded-2xl shadow hover:shadow-md transition bg-white p-4 flex flex-col justify-between items-center"
             >
+              {session?.user.role === "ADMIN" && <div className="absolute right-0 top-0">
+                <DropdownMenu>
+                  <DropdownMenuTrigger><HiDotsHorizontal size={20} /></DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem><Link href={`/edit?id=${product.id}`}>Editar</Link></DropdownMenuItem>
+                      <DropdownMenuItem>Excluir</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+              </div>}
               {product.imageUrl && (
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className="h-40 w-full rounded-md mb-3"
+                  className="h-40 rounded-md mb-3"
                 />
               )}
               <h2 className="text-lg font-semibold">{product.name}</h2>
@@ -94,7 +119,9 @@ export default function ProductsPage() {
                 >
                   –
                 </button>
-                <span className="font-medium">{quantities[product.id] || 1}</span>
+                <span className="font-medium">
+                  {quantities[product.id] || 1}
+                </span>
                 <button
                   onClick={() => handleIncrement(product.id)}
                   className="px-2 py-1 bg-zinc-200 rounded"

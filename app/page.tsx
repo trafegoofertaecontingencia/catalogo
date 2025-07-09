@@ -13,7 +13,7 @@ export default async function Home() {
    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-300 px-4">
       <div className="w-full max-w-xl text-center p-6 sm:p-10 bg-white/90 backdrop-blur-md rounded-3xl shadow-xl border border-zinc-200">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-zinc-800 mb-4">
-          Bem-vindo à <span className="text-zinc-800">Marccini</span>
+          Bem-vindo à <span className="text-zinc-800">Jamava</span>
         </h1>
 
         <p className="text-zinc-600 text-base sm:text-lg mb-6">

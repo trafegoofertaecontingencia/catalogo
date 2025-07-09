@@ -2,8 +2,6 @@ import { prisma } from "@/utils/connect";
 
 import { NextResponse } from "next/server";
 
-import { z } from "zod";
-
 import { productSchema } from "@/lib/schemas/product";
 
 export async function GET() {
