@@ -1,5 +1,4 @@
 import "./globals.css";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -9,9 +8,15 @@ import { CartProvider } from "@/context/CartContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Catalogo Marccini",
-  description: "Melhor preço",
+export const metadata = {
+  title: "Jamava",
+  description: "App Jamava",
+  manifest: "/manifest.json",
+  themeColor: "#0a84ff",
+  icons: {
+    icon: "/icons/icon-192x192.png",
+    apple: "/icons/icon-192x192.png",
+  },
 };
 
 export default async function RootLayout({
