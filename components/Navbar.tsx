@@ -10,11 +10,14 @@ import { useSession } from "next-auth/react";
 import { useCart } from "@/context/CartContext";
 
 export default function Navbar() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
   const { state } = useCart();
 
-  const totalQuantity = state.items.reduce((acc, item) => acc + item.quantity, 0);
+  const totalQuantity = state.items.reduce(
+    (acc, item) => acc + item.quantity,
+    0
+  );
 
   return (
     <nav className="w-full bg-zinc-900 text-white shadow px-4 py-3 flex items-center justify-between">
@@ -23,30 +26,41 @@ export default function Navbar() {
         <img className="w-20" src="/logo.png" alt="" />
       </Link>
 
-      {/* Desktop Menu */}
       <div className="flex gap-4 items-center relative">
-        {session?.user.role === "ADMIN" && <Link href="/create">Cadastrar</Link>}
-        <Link href="/cart" className="relative">
-          <FaShoppingCart size={22} />
-          {totalQuantity > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-600 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center">
-              {totalQuantity}
-            </span>
-          )}
-        </Link>
-
-        {session ? (
-          <>
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={session?.user?.image || ""} alt="Avatar" />
-              <AvatarFallback>?</AvatarFallback>
-            </Avatar>
-            <SignOut />
-          </>
+        {status === "loading" ? (
+          <div className="flex gap-4 items-center animate-pulse">
+            <FaShoppingCart size={22} />
+            <div className="h-8 w-12 bg-gray-300 rounded" />
+          </div>
         ) : (
-          <Button variant="secondary">
-            <Link href="/auth/sign-in">Entrar</Link>
-          </Button>
+          <>
+            {session?.user.role === "ADMIN" && (
+              <Link href="/create">Cadastrar</Link>
+            )}
+
+            <Link href="/cart" className="relative">
+              <FaShoppingCart size={22} />
+              {totalQuantity > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-600 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center">
+                  {totalQuantity}
+                </span>
+              )}
+            </Link>
+
+            {session ? (
+              <>
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={session.user.image || ""} alt="Avatar" />
+                  <AvatarFallback>?</AvatarFallback>
+                </Avatar>
+                <SignOut />
+              </>
+            ) : (
+              <Button variant="secondary">
+                <Link href="/auth/sign-in">Entrar</Link>
+              </Button>
+            )}
+          </>
         )}
       </div>
     </nav>
