@@ -98,10 +98,11 @@ export default function EditProductForm() {
 
       console.log("DATA ==>", data);
 
-      const res = await fetch(`api/products/${productId}`, {
+      const res = await fetch("/api/products/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          id: productId, // agora o ID vai no body
           name: data.name,
           description: data.description,
           price: Number(data.price),
