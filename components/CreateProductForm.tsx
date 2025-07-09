@@ -6,13 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { productFormSchema } from "@/lib/schemas/createProduc";
+import { createProductFormSchema } from "@/lib/schemas/createProduc";
 import { Button } from "@/components/ui/button";
 
 import { supabase } from "@/lib/supabase";
 import { v4 as uuidv4 } from "uuid";
 
-type ProductFormData = z.infer<typeof productFormSchema>;
+type ProductFormData = z.infer<typeof createProductFormSchema>;
 
 export default function CreateProductForm() {
   const {
@@ -22,7 +22,7 @@ export default function CreateProductForm() {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<ProductFormData>({
-    resolver: zodResolver(productFormSchema),
+    resolver: zodResolver(createProductFormSchema),
   });
 
   const [categories, setCategories] = useState<{ id: string; name: string }[]>(
