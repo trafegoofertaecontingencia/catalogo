@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Carousel from "@/components/Carousel";
 
 export default function ProductsPage() {
 
@@ -72,6 +73,8 @@ export default function ProductsPage() {
   };
 
   return (
+    <>
+    <Carousel />
     <div className="max-w-6xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Todos os Produtos</h1>
 
@@ -141,5 +144,6 @@ export default function ProductsPage() {
         </div>
       )}
     </div>
+    </>
   );
 }

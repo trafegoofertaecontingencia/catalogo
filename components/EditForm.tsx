@@ -12,6 +12,8 @@ import { v4 as uuidv4 } from "uuid";
 export default function EditProductForm() {
   const searchParams = useSearchParams();
   const productId = searchParams.get("id");
+
+  console.log("PRODUCTID:", productId);
   const router = useRouter();
 
   const [categories, setCategories] = useState<{ id: string; name: string }[]>(
@@ -46,6 +48,8 @@ export default function EditProductForm() {
       if (!productId) return;
       const res = await fetch(`/api/products/${productId}`);
       const data = await res.json();
+
+      console.log("DATA", data)
       reset({
         name: data.name,
         description: data.description,
@@ -96,13 +100,11 @@ export default function EditProductForm() {
         imageUrl = publicUrlData.publicUrl;
       }
 
-      console.log("DATA ==>", data);
-
       const res = await fetch("/api/products/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: productId, // agora o ID vai no body
+          id: productId, 
           name: data.name,
           description: data.description,
           price: Number(data.price),

@@ -30,7 +30,7 @@ export default async function RootLayout({
         <Providers>
           <CartProvider>
             <Navbar />
-            <div className="min-h-[80vh] bg-zinc-100 pt-10">{children}</div>
+            <div className="min-h-[80vh] bg-zinc-100">{children}</div>
             <Footer />
           </CartProvider>
         </Providers>
