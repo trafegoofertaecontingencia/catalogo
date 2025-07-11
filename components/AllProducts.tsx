@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Carousel from "@/components/Carousel";
 
+import { toast } from "sonner"; // certifique-se de importar
+
 const PRODUCTS_PER_PAGE = 10;
 
 export default function ProductsPage() {
@@ -72,6 +74,8 @@ export default function ProductsPage() {
         imageUrl: product.imageUrl || "",
       },
     });
+
+    toast.success(`${product.name} adicionado ao carrinho!`)
   };
 
   return (

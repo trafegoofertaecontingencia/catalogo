@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 
 import { Providers } from "./providers";
 import { CartProvider } from "@/context/CartContext";
+import { Toaster } from "sonner";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +32,7 @@ export default async function RootLayout({
         <Providers>
           <CartProvider>
             <Navbar />
+            <Toaster />
             <div className="min-h-[80vh] bg-zinc-100">{children}</div>
             <Footer />
           </CartProvider>
