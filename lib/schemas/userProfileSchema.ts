@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 export const userProfileSchema = z.object({
-  name: z.string().min(1, "Nome é obrigatório"),
+  companyName: z.string().min(1, "Nome da empresa é obrigatório"),
+  representativeName: z.string().min(1, "Nome do representante é obrigatório"),
   email: z.string().email("E-mail inválido"),
   password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
   cnpj: z

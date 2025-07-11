@@ -13,22 +13,24 @@ enum Role {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
+  id                 String   @id @default(cuid())
+  companyName        String
+  representativeName String
+  email              String   @unique
+  password           String
+  cnpj               String   @unique
+  address            String
+  contact            String
+  storeImageUrl      String // URL da imagem do estabelecimento
+  role               Role     @default(USER)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relacionamentos
   accounts      Account[]
   sessions      Session[]
-  role          Role          @default(USER)
-  // Optional for WebAuthn support
+  orders        Order[]
   Authenticator Authenticator[]
-
-  orders Order[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Account {
@@ -113,22 +115,23 @@ enum OrderStatus {
 }
 
 model Order {
-  id        String     @id @default(uuid())
-  user      User       @relation(fields: [userId], references: [id])
+  id        String      @id @default(uuid())
+  user      User        @relation(fields: [userId], references: [id])
   userId    String
-  status    OrderStatus @default(DRAFT)  
-  total     Float      @default(0)
+  status    OrderStatus @default(DRAFT)
+  total     Float       @default(0)
   items     OrderItem[]
-  createdAt DateTime   @default(now())
+  createdAt DateTime    @default(now())
+
   @@unique([userId, status])
 }
 
 model OrderItem {
-  id        String   @id @default(uuid())
-  order     Order    @relation(fields: [orderId], references: [id])
+  id        String  @id @default(uuid())
+  order     Order   @relation(fields: [orderId], references: [id])
   orderId   String
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
   productId String
   quantity  Int
-  price     Float     // ✅ Armazena o valor unitário no momento da compra
+  price     Float // ✅ Armazena o valor unitário no momento da compra
 }
