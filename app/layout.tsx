@@ -7,7 +7,6 @@ import { Providers } from "./providers";
 import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "sonner";
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -32,7 +31,12 @@ export default async function RootLayout({
         <Providers>
           <CartProvider>
             <Navbar />
-            <Toaster />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                className: "text-lg font-medium", // você pode usar text-sm, text-lg etc.
+              }}
+            />
             <div className="min-h-[80vh] bg-zinc-100">{children}</div>
             <Footer />
           </CartProvider>

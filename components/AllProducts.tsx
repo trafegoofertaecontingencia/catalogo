@@ -75,18 +75,24 @@ export default function ProductsPage() {
       },
     });
 
-    toast.success(`${product.name} adicionado ao carrinho!`)
+    toast.success(`${product.name} adicionado ao carrinho!`, {
+      icon: "✅",
+    });
   };
 
   return (
     <>
       <Carousel />
       <div className="max-w-6xl mx-auto p-6">
-        <h1 className="text-2xl text-primary font-bold mb-6">Todos os Produtos</h1>
+        <h1 className="text-2xl text-primary font-bold mb-6">
+          Todos os Produtos
+        </h1>
 
         {isLoading ? (
           <div className="flex justify-center">
-            <span className="text-zinc-500 text-sm">Carregando produtos...</span>
+            <span className="text-zinc-500 text-sm">
+              Carregando produtos...
+            </span>
           </div>
         ) : (
           <>
@@ -120,7 +126,9 @@ export default function ProductsPage() {
                   )}
                   <h2 className="text-lg font-semibold">{product.name}</h2>
                   {product.category?.name && (
-                    <p className="text-sm text-zinc-500">Categoria: {product.category.name}</p>
+                    <p className="text-sm text-zinc-500">
+                      Categoria: {product.category.name}
+                    </p>
                   )}
                   <p className="text-primary text-2xl font-bold mt-2">
                     R$ {Number(product.price).toFixed(2)}
@@ -133,7 +141,9 @@ export default function ProductsPage() {
                     >
                       –
                     </button>
-                    <span className="font-medium">{quantities[product.id] || 1}</span>
+                    <span className="font-medium">
+                      {quantities[product.id] || 1}
+                    </span>
                     <button
                       onClick={() => handleIncrement(product.id)}
                       className="px-2 py-1 bg-zinc-200 rounded"
