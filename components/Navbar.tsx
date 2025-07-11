@@ -20,10 +20,9 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="w-full bg-zinc-900 text-white shadow px-4 py-3 flex items-center justify-between">
-      {/* Logo / Nome do App */}
-      <Link href="/" className="text-xl font-bold">
-        <img className="w-20" src="/logo.png" alt="" />
+    <nav className="w-full bg-zinc-100 text-white shadow px-4 py-3 flex items-center justify-between">
+      <Link href="/">
+        <img className="w-30" src="/logo.png" alt="" />
       </Link>
 
       <div className="flex gap-4 items-center relative">
@@ -35,11 +34,11 @@ export default function Navbar() {
         ) : (
           <>
             {session?.user.role === "ADMIN" && (
-              <Link href="/create">Cadastrar</Link>
+              <Link className="text-primary" href="/create">Cadastrar</Link>
             )}
 
             <Link href="/cart" className="relative">
-              <FaShoppingCart size={22} />
+              <FaShoppingCart className="text-primary" size={22} />
               {totalQuantity > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-600 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center">
                   {totalQuantity}
@@ -56,7 +55,7 @@ export default function Navbar() {
                 <SignOut />
               </>
             ) : (
-              <Button variant="secondary">
+              <Button className="bg-primary text-white" variant="secondary">
                 <Link href="/auth/sign-in">Entrar</Link>
               </Button>
             )}

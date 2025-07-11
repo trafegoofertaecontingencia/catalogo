@@ -9,7 +9,7 @@ const SignOut = () => {
 
   return (
     <div className="flex justify-center">
-      <Button variant="secondary" onClick={handleSignOut}>
+      <Button className="bg-primary text-white" variant="secondary" onClick={handleSignOut}>
         Sair
       </Button>
     </div>

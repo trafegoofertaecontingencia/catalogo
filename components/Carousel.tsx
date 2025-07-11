@@ -15,7 +15,6 @@ export default function Carousel() {
     <div>
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
-        spaceBetween={50}
         slidesPerView={1}
         pagination
         navigation
@@ -24,12 +23,12 @@ export default function Carousel() {
         delay: 3000, 
         disableOnInteraction: false, 
       }}
-        onSlideChange={() => console.log("slide change")}
-        onSwiper={(swiper) => console.log(swiper)}
+        onSlideChange={() => {}}
+        onSwiper={() => {}}
       >
-        <SwiperSlide><img src="/carousel/banner01.jpg" /></SwiperSlide>
-        <SwiperSlide><img src="/carousel/banner02.jpg" /></SwiperSlide>
-        <SwiperSlide><img src="/carousel/banner03.jpg" /></SwiperSlide>
+          <SwiperSlide><img src="/carousel/banner01.jpg" /></SwiperSlide>
+          <SwiperSlide><img src="/carousel/banner02.jpg" /></SwiperSlide>
+          <SwiperSlide><img src="/carousel/banner03.jpg" /></SwiperSlide>
       </Swiper>
     </div>
   );
