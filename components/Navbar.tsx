@@ -20,7 +20,7 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="w-full bg-zinc-100 text-white shadow px-4 py-3 flex items-center justify-between">
+    <nav className="w-full bg-zinc-100 text-white px-4 py-3 flex items-center justify-between shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]">
       <Link href="/">
         <img className="w-30" src="/logo.png" alt="" />
       </Link>
@@ -29,7 +29,7 @@ export default function Navbar() {
         {status === "loading" ? (
           <div className="flex gap-4 items-center animate-pulse">
             <FaShoppingCart size={22} />
-            <div className="h-8 w-12 bg-gray-300 rounded" />
+            <div className="h-8 w-12 bg-primary rounded" />
           </div>
         ) : (
           <>
