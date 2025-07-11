@@ -76,7 +76,7 @@ export default function ProductsPage() {
     <>
     <Carousel />
     <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Todos os Produtos</h1>
+      <h1 className="text-2xl text-[#0b59a1] font-bold mb-6">Todos os Produtos</h1>
 
       {isLoading ? (
         <div className="flex justify-center">
@@ -111,7 +111,7 @@ export default function ProductsPage() {
                   Categoria: {product.category.name}
                 </p>
               )}
-              <p className="text-zinc-800 font-bold mt-2">
+              <p className="text-[#0b59a1] text-2xl font-bold mt-2">
                 R$ {Number(product.price).toFixed(2)}
               </p>
 
@@ -135,7 +135,7 @@ export default function ProductsPage() {
 
               <button
                 onClick={() => handleAddToCart(product)}
-                className="mt-3 bg-zinc-800 text-white px-4 py-2 rounded-xl hover:bg-zinc-700 transition"
+                className="mt-3 bg-[#0b59a1] text-white px-4 py-2 rounded-xl transition"
               >
                 Adicionar ao Carrinho
               </button>
