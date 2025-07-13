@@ -5,6 +5,8 @@ import { useCart } from "@/context/CartContext";
 export default function CartPage() {
   const { state, dispatch } = useCart();
 
+  console.log(state)
+
   const total = state.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const handleIncrement = (productId: string) => {
@@ -14,6 +16,10 @@ export default function CartPage() {
   const handleDecrement = (productId: string) => {
     dispatch({ type: "DECREMENT", payload: { productId } });
   };
+
+  const handleDelete = (productId: string) => {
+    dispatch({ type: "REMOVE_ITEM", payload: {productId} })
+  }
 
   const handleCheckout = () => {
     // Aqui você pode chamar a API para finalizar
@@ -55,6 +61,9 @@ export default function CartPage() {
               </div>
               <div className="font-bold">
                 R$ {(Number(item.price) * item.quantity).toFixed(2)}
+              </div>
+              <div onClick={() => handleDelete(item.productId)} className="h-[100px] flex items-baseline">
+                <span className="text-2xl">X</span>
               </div>
             </li>
           ))}

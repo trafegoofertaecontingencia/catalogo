@@ -28,13 +28,9 @@ export const { auth, handlers, signIn } = NextAuth({
           return null;
         }
 
-        // Agora sim você sabe que são strings
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
-
-        console.log("USER:", user);
-
 
         if (!user || !user.password) return null;
 
@@ -56,7 +52,7 @@ export const { auth, handlers, signIn } = NextAuth({
     }),
   ],
   session: {
-    strategy: "jwt", // ou "database" se quiser usar sessão persistente
+    strategy: "jwt", 
   },
   callbacks: {
     async jwt({ token }) {

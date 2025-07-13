@@ -9,7 +9,13 @@ export const userProfileSchema = z.object({
     .string()
     .min(14, "CNPJ deve conter 14 dígitos")
     .max(18, "CNPJ inválido"),
-  address: z.string().min(1, "Endereço é obrigatório"),
+  street: z.string().min(1, "Rua é obrigatória"),
+  number: z.string().min(1, "Número é obrigatório"),
+  complement: z.string().optional(),
+  neighborhood: z.string().min(1, "Bairro é obrigatório"),
+  city: z.string().min(1, "Cidade é obrigatória"),
+  state: z.string().min(1, "Estado é obrigatório"),
+  zipCode: z.string().min(5, "CEP é obrigatório"),
   contact: z.string().min(10, "Contato deve ter no mínimo 10 dígitos"),
   storeImage: z
     .any()
@@ -17,3 +23,4 @@ export const userProfileSchema = z.object({
 });
 
 export type UserProfileFormData = z.infer<typeof userProfileSchema>;
+
