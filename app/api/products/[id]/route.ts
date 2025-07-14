@@ -46,22 +46,5 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  params: any) {
-  try {
-    const {id} = params;
 
-    const produto = await prisma.product.findUnique({ where: { id } });
 
-    if (!produto) {
-      return NextResponse.json({ error: 'Produto não encontrado.' }, { status: 404 });
-    }
-
-    await prisma.product.delete({ where: { id } });
-
-    return NextResponse.json({ message: 'Produto deletado com sucesso.' }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error: 'Erro ao deletar produto.' }, { status: 500 });
-  }
-}

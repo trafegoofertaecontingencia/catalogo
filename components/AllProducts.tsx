@@ -98,8 +98,10 @@ export default function ProductsPage() {
   };
 
   const handleDelete = async (productId: string, productName: string) => {
+    console.log("CHAMOU A FUNÇÃO")
     try {
-      const res = await fetch(`/api/products/${productId}`, {
+      console.log("ENTROU NO TRY")
+      const res = await fetch(`/api/products?id=${productId}`, {
         method: "DELETE",
       })
 
@@ -109,11 +111,12 @@ export default function ProductsPage() {
         return
       };
 
+      setProducts(prev => prev.filter(p => p.id !== productId));
+
       toast.success(`${productName} deletado com sucesso!`, {
       icon: "✅",
     });
 
-    router.refresh();
 
     }catch(err) {
       console.log("Erro ao deletar")

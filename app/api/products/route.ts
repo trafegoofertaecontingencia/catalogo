@@ -66,3 +66,25 @@ export async function POST(req: Request) {
     )
 
 }}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    console.log("ID", id)
+
+    if (!id) {
+      return NextResponse.json({ message: "ID não fornecido" }, { status: 400 });
+    }
+
+    await prisma.product.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ message: "Produto deletado com sucesso" }, { status: 200 });
+  } catch (error) {
+    console.error("[DELETE_PRODUCT_ERROR]", error);
+    return NextResponse.json({ message: "Erro ao deletar produto" }, { status: 500 });
+  }
+}
