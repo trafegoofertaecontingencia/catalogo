@@ -33,6 +33,7 @@ export default function Navbar() {
           </div>
         ) : (
           <>
+           <Link className="text-primary" href="/dashboard">Dasboard</Link>
             <Link href="/cart" className="relative">
               <FaShoppingCart className="text-primary" size={22} />
               {totalQuantity > 0 && (
