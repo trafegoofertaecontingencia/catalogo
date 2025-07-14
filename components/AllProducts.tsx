@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Carousel from "@/components/Carousel";
 
+import { useRouter } from "next/navigation"
+
 import { Input } from "@/components/ui/input";
 
 import { LucideSearch } from "lucide-react";
@@ -25,6 +27,8 @@ import { toast } from "sonner"; // certifique-se de importar
 const PRODUCTS_PER_PAGE = 10;
 
 export default function ProductsPage() {
+
+  const router = useRouter();
 
   const { register, handleSubmit, watch } = useForm();
 
@@ -108,6 +112,8 @@ export default function ProductsPage() {
       toast.success(`${productName} deletado com sucesso!`, {
       icon: "✅",
     });
+
+    router.refresh();
 
     }catch(err) {
       console.log("Erro ao deletar")
