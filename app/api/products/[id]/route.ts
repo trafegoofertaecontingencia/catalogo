@@ -48,10 +48,9 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
-) {
+  params: any) {
   try {
-    const {id} = context.params;
+    const {id} = params;
 
     const produto = await prisma.product.findUnique({ where: { id } });
 
