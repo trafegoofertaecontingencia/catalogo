@@ -93,6 +93,27 @@ export default function ProductsPage() {
     });
   };
 
+  const handleDelete = async (productId: string, productName: string) => {
+    try {
+      const res = await fetch(`/api/products/${productId}`, {
+        method: "DELETE",
+      })
+
+      if(!res.ok) {
+        const error = await res.json();
+        console.log("Erro ao deletar", error);
+        return
+      };
+
+      toast.success(`${productName} deletado com sucesso!`, {
+      icon: "✅",
+    });
+
+    }catch(err) {
+      console.log("Erro ao deletar")
+    }
+  }
+
   return (
     <>
       <Carousel />
@@ -136,7 +157,7 @@ export default function ProductsPage() {
                           <DropdownMenuItem>
                             <Link href={`/edit?id=${product.id}`}>Editar</Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem>Excluir</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDelete(product.id, product.name)}>Excluir</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
