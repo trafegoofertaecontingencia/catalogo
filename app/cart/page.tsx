@@ -17,7 +17,7 @@ export default function CartPage() {
     dispatch({ type: "DECREMENT", payload: { productId } });
   };
 
-  const handleDelete = (productId: string) => {
+  const handleRemoveItem = (productId: string) => {
     dispatch({ type: "REMOVE_ITEM", payload: {productId} })
   }
 
@@ -62,7 +62,7 @@ export default function CartPage() {
               <div className="font-bold">
                 R$ {(Number(item.price) * item.quantity).toFixed(2)}
               </div>
-              <div onClick={() => handleDelete(item.productId)} className="h-[100px] flex items-baseline">
+              <div onClick={() => handleRemoveItem(item.productId)} className="h-[100px] flex items-baseline">
                 <span className="text-2xl">X</span>
               </div>
             </li>
@@ -75,7 +75,7 @@ export default function CartPage() {
           <p className="text-lg font-bold">Total: R$ {total.toFixed(2)}</p>
           <button
             onClick={handleCheckout}
-            className="bg-zinc-800 text-white px-6 py-2 rounded-xl transition"
+            className="bg-primary text-white px-6 py-2 rounded-xl transition"
           >
             Finalizar Compra
           </button>

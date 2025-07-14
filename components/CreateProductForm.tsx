@@ -214,7 +214,7 @@ export default function CreateProductForm() {
         <div className="text-center">
           <Button
             disabled={isSubmitting}
-            className="bg-zinc-800 text-white px-6 py-2 rounded"
+            className="bg-primary text-white px-6 py-2 rounded"
           >
             {isSubmitting ? "Enviando..." : "Cadastrar"}
           </Button>

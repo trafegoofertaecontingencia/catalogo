@@ -12,14 +12,22 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "10", 10);
     const skip = (page - 1) * limit;
 
+    const search = searchParams.get("search")?.trim() || "";
+
+    // Filtro condicional: só aplica se tiver search
+    const where = search
+      ? { name: { contains: search, mode: "insensitive" as const } }
+      : {};
+
     const [products, total] = await Promise.all([
       prisma.product.findMany({
+        where,
         skip,
         take: limit,
         include: { category: true },
         orderBy: { createdAt: "desc" },
       }),
-      prisma.product.count(),
+      prisma.product.count({ where }),
     ]);
 
     return NextResponse.json({
@@ -38,6 +46,7 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
 
 export async function POST(req: Request) {
     try {

@@ -28,15 +28,11 @@ export default function Navbar() {
       <div className="flex gap-4 items-center relative">
         {status === "loading" ? (
           <div className="flex gap-4 items-center animate-pulse">
-            <FaShoppingCart size={22} />
+            <FaShoppingCart className="text-primary" size={22} />
             <div className="h-8 w-12 bg-primary rounded" />
           </div>
         ) : (
           <>
-            {session?.user.role === "ADMIN" && (
-              <Link className="text-primary" href="/create">Cadastrar</Link>
-            )}
-
             <Link href="/cart" className="relative">
               <FaShoppingCart className="text-primary" size={22} />
               {totalQuantity > 0 && (

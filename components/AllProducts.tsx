@@ -14,11 +14,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Carousel from "@/components/Carousel";
 
+import { Input } from "@/components/ui/input";
+
+import { Card, CardContent } from "@/components/ui/card";
+import { LucideSearch } from "lucide-react";
+
+import { useForm } from "react-hook-form";
+
 import { toast } from "sonner"; // certifique-se de importar
 
 const PRODUCTS_PER_PAGE = 10;
 
 export default function ProductsPage() {
+
+  const { register, handleSubmit, watch } = useForm();
+
   const { data: session } = useSession();
   const { dispatch } = useCart();
 
@@ -30,11 +40,13 @@ export default function ProductsPage() {
 
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
+  const search = watch("search");
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const res = await fetch(`/api/products?page=${page}`);
+        const res = await fetch(`/api/products?page=${page}&search=${search}`);
         const data = await res.json();
         setProducts(data.data);
         setTotalProducts(data.meta.total);
@@ -52,7 +64,7 @@ export default function ProductsPage() {
     };
 
     fetchProducts();
-  }, [page]);
+  }, [page, search]);
 
   const handleIncrement = (id: string) => {
     setQuantities((prev) => ({ ...prev, [id]: prev[id] + 1 }));
@@ -83,6 +95,17 @@ export default function ProductsPage() {
   return (
     <>
       <Carousel />
+
+    <div className="flex items-center mt-4 ml-4 border w-[50%]">
+      <LucideSearch className="ml-2 mr-3 text-primary" size={20} />
+      <Input
+        type="text"
+        placeholder="Pesquisar produtos..."
+        {...register("search")}
+        className="border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+      />
+    </div>
+
       <div className="max-w-6xl mx-auto p-6">
         <h1 className="text-2xl text-primary font-bold mb-6">
           Todos os Produtos
