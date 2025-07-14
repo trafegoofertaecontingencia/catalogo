@@ -16,7 +16,6 @@ import Carousel from "@/components/Carousel";
 
 import { Input } from "@/components/ui/input";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { LucideSearch } from "lucide-react";
 
 import { useForm } from "react-hook-form";
@@ -40,7 +39,7 @@ export default function ProductsPage() {
 
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
-  const search = watch("search");
+  const search = watch("search") || "";
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -50,6 +49,8 @@ export default function ProductsPage() {
         const data = await res.json();
         setProducts(data.data);
         setTotalProducts(data.meta.total);
+
+        console.log("DATA", data);
 
         const initialQuantities: { [key: string]: number } = {};
         data.data.forEach((product: Product) => {
