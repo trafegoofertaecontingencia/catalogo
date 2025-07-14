@@ -93,7 +93,7 @@ export default function CreateProductForm() {
         }),
       });
 
-      if (!res.ok) throw new Error("Erro ao criar produto");
+      if (!res.ok) await res.text();
 
       setSuccess(true);
       router.push("/products");

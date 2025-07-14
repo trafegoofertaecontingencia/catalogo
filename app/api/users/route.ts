@@ -28,11 +28,7 @@ export async function POST(req: Request) {
       return new NextResponse("E-mail já está em uso", { status: 400 });
     }
 
-    console.log("PASSOU DA VERIFICAÇÃO DE EMAIL")
-
     const hashedPassword = await bcrypt.hash(password, 12);
-
-    console.log('HASHEDPASSWORD', hashedPassword)
 
     const newUser = await prisma.user.create({
       data: {
